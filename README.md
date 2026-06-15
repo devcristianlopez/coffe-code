@@ -2,7 +2,7 @@
 
 App web progresiva (PWA) para guiarte paso a paso en la preparación de café con métodos como **V60**, **Chemex**, **Prensa Francesa**, **Moka**, **Aeropress** y **Espresso**. Ideal para usar mientras te hacés el café: timer interactivo, modo manos libres, calculadora de ratios y registro de catas.
 
-> 🚀 **Live demo:** https://anarcha0s.github.io/coffe-code/
+> 🚀 **Live demo:** https://devcristianlopez.github.io/coffe-code/
 
 ---
 
@@ -63,7 +63,7 @@ Después de cada preparación:
 
 La app es totalmente instalable en tu celular o desktop:
 
-1. Abrí `https://anarcha0s.github.io/coffe-code/` en Chrome/Edge/Safari
+1. Abrí `https://devcristianlopez.github.io/coffe-code/` en Chrome/Edge/Safari
 2. En Android: tocá "Instalar" en el banner o menú
 3. En iOS: tocá "Compartir" → "Agregar a pantalla de inicio"
 4. En Desktop: click en el ícono de instalación en la barra de direcciones
@@ -170,7 +170,7 @@ coffe-code/
 
 ```bash
 # Clonar
-git clone https://github.com/anarcha0s/coffe-code.git
+git clone https://github.com/devcristianlopez/coffe-code.git
 cd coffe-code
 
 # Instalar dependencias
