@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecipesStore } from '../hooks/useRecipes';
 import { useTimer } from '../hooks/useTimer';
 import { useUIStore } from '../stores/uiStore';
+import { warmUpAudio } from '../lib/sound';
 import BrewTimer from '../components/BrewTimer';
 import BrewStepCard from '../components/BrewStepCard';
 import TastingNotesForm from '../components/TastingNotesForm';
@@ -277,7 +278,10 @@ export default function BrewPage() {
           </div>
 
           <button
-            onClick={timer.start}
+            onClick={() => {
+              warmUpAudio();
+              timer.start();
+            }}
             className="bg-coffee-primary text-white w-full max-w-sm py-4 rounded-2xl text-lg font-bold shadow-sm hover:bg-coffee-primary-light transition-colors active:scale-[0.98] cursor-pointer"
           >
             ☕ Iniciar preparación

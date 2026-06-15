@@ -1,23 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BrewStep } from '../types';
-
-function playBeep(): void {
-  try {
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = 800;
-    osc.type = 'sine';
-    gain.gain.value = 0.3;
-    osc.start();
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-    osc.stop(ctx.currentTime + 0.2);
-  } catch {
-    // Audio not available — silently ignore
-  }
-}
+import { playBeep } from '../lib/sound';
+import { useSettingsStore } from './useSettings';
 
 export interface UseTimerReturn {
   currentStepIndex: number;
@@ -50,6 +34,16 @@ export function useTimer({ steps }: UseTimerProps): UseTimerReturn {
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const transitioningRef = useRef(false);
+
+  // ── Sound settings ─────────────────────────────────────────────
+  const soundEnabled = useSettingsStore((s) => s.soundEnabled);
+  const soundVolume = useSettingsStore((s) => s.soundVolume);
+
+  const playIfEnabled = useCallback(() => {
+    if (soundEnabled) {
+      playBeep(soundVolume / 100);
+    }
+  }, [soundEnabled, soundVolume]);
 
   const currentStep = steps[currentStepIndex] ?? null;
   const stepDuration = currentStep?.duration ?? 0;
@@ -95,7 +89,7 @@ export function useTimer({ steps }: UseTimerProps): UseTimerReturn {
       const candidate = steps[nextIdx];
       if (!candidate) break;
       if (candidate.duration > 0) {
-        playBeep();
+        playIfEnabled();
         setCurrentStepIndex(nextIdx);
         setTimeLeft(candidate.duration);
         requestAnimationFrame(() => {
@@ -109,7 +103,7 @@ export function useTimer({ steps }: UseTimerProps): UseTimerReturn {
 
     // No more steps with duration → brew finished
     if (nextIdx >= steps.length) {
-      playBeep();
+      playIfEnabled();
       // Point to the last step visually
       setCurrentStepIndex(steps.length - 1);
       clearTimer();
@@ -144,7 +138,7 @@ export function useTimer({ steps }: UseTimerProps): UseTimerReturn {
       setTimeLeft(0);
       return;
     }
-    playBeep();
+    playIfEnabled();
     goToStep(currentStepIndex + 1);
   }, [currentStepIndex, steps.length, clearTimer, goToStep]);
 
